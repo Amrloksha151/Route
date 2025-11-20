@@ -14,10 +14,18 @@ reserved = {
     "IF": "IF",
     "IN": "IN",
     "WHILE": "WHILE",
+    #"CONTINUE": "CONTINUE",
 
     # functions / return
     "FUNC": "FUNCTION",
     "RETURN": "RETURN",
+
+    # Threading
+    "THREAD": "THREAD",
+    "RUN": "RUN",
+    #"JOIN": "JOIN",
+    #"LOCK": "LOCK",
+    #"UNLOCK": "UNLOCK",
 
     # networking / protocols
     "ARP": "ARP",
@@ -26,9 +34,6 @@ reserved = {
     "SOCKET": "SOCKET",
     "TCP": "TCP",
     "UDP": "UDP",
-
-    # commented / reserved for later
-    # "CONTINUE": "CONTINUE",
     # "WS": "WS",
 }
 
@@ -39,6 +44,7 @@ tokens = [
     "BOOL",
     "IDENTIFIER",
     "NEWLINE",
+    "COMMENT",
 
     # assignment and punctuation
     "ASSIGN",
@@ -64,3 +70,5 @@ tokens = [
     "LBRACE",
     "RBRACE",
 ] + list(reserved.values())
+
+t_ignore_COMMENT = r'\#.*'
