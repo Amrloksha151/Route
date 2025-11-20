@@ -1,11 +1,44 @@
 from ply import lex # importing the lex lexer module
 
-tokens = (
+reserved = {
+    # logical operators
+    "AND": "AND",
+    "OR": "OR",
+    "NOT": "NOT",
+
+    # control flow
+    "BREAK": "BREAK",
+    "ELIF": "ELIF",
+    "ELSE": "ELSE",
+    "FOR": "FOR",
+    "IF": "IF",
+    "IN": "IN",
+    "WHILE": "WHILE",
+
+    # functions / return
+    "FUNC": "FUNCTION",
+    "RETURN": "RETURN",
+
+    # networking / protocols
+    "ARP": "ARP",
+    "HTTP": "HTTP",
+    "ICMP": "ICMP",
+    "SOCKET": "SOCKET",
+    "TCP": "TCP",
+    "UDP": "UDP",
+
+    # commented / reserved for later
+    # "CONTINUE": "CONTINUE",
+    # "WS": "WS",
+}
+
+tokens = [
     # literals and identifiers
     "NUMBER",
     "TEXT",
     "BOOL",
     "IDENTIFIER",
+    "NEWLINE",
 
     # assignment and punctuation
     "ASSIGN",
@@ -25,37 +58,9 @@ tokens = (
     "LEQ",
     "GEQ",
 
-    # logical operators
-    "AND",
-    "OR",
-    "NOT",
-
     # grouping
     "LPAREN",
     "RPAREN",
     "LBRACE",
     "RBRACE",
-
-    # control flow keywords
-    "IF",
-    "ELIF",
-    "ELSE",
-    "WHILE",
-    "FOR",
-    "IN",
-    "BREAK",
-    # "CONTINUE",
-
-    # functions and return
-    "FUNCTION",
-    "RETURN",
-
-    # networking / protocols
-    "SOCKET",
-    "TCP",
-    "UDP",
-    "HTTP",
-    "ARP",
-    "ICMP",
-    # "WS",
-)
+] + list(reserved.values())
