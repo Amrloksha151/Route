@@ -23,6 +23,7 @@ reserved = {
     # Threading
     "THREAD": "THREAD",
     "RUN": "RUN",
+    "ARGS": "ARGS",
     #"JOIN": "JOIN",
     #"LOCK": "LOCK",
     #"UNLOCK": "UNLOCK",
@@ -137,6 +138,7 @@ t_NOT = r'NOT'
 # threading
 t_THREAD = r'THREAD'
 t_RUN = r'RUN'
+t_ARGS = r'ARGS'
 # t_JOIN = r'JOIN'
 # t_LOCK = r'LOCK'
 # t_UNLOCK = r'UNLOCK'

@@ -48,6 +48,7 @@ def p_statement(p):
                  | send_statement NEWLINE
                  | receive_statement NEWLINE
                  | thread_statement NEWLINE
+                 | run_thread_statement NEWLINE
                  | NEWLINE'''
     p[0] = p[1]
 
@@ -231,3 +232,38 @@ def p_bind_statement(p):
     else:
         p[0] = ('bind', p[2])
 
+def p_connect_statement(p):
+    '''connect_statement : CONNECT IDENTIFIER'''
+    p[0] = ('connect', p[2], p[3], p[4], p[6])
+
+def p_close_statement(p):
+    '''close_statement : CLOSE IDENTIFIER'''
+    p[0] = ('close', p[2])
+
+def p_listen_statement(p):
+    '''listen_statement : LISTEN IDENTIFIER'''
+    p[0] = ('listen', p[2])
+
+def p_send_statement(p):
+    '''send_statement : SEND IDENTIFIER TEXT'''
+    p[0] = ('send', p[2], p[3])
+
+def p_receive_statement(p):
+    '''receive_statement : RECEIVE IDENTIFIER NUMBER'''
+    p[0] = ('receive', p[2], p[3])
+
+def p_thread_statement(p):
+    '''thread_statement : IDENTIFIER ASSIGN THREAD IDENTIFIER ARGS LPAREN optional_arguments RPAREN'''
+    p[0] = ('thread', p[2], p[5])
+
+def p_run_thread_statement(p):
+    '''run_thread_statement : RUN IDENTIFIER'''
+    p[0] = ('run_thread', p[2])
+
+def p_error(p):
+    if p:
+        print(f"Syntax error at '{p.value}' (type: {p.type}) on line {p.lineno}")
+    else:
+        print("Syntax error at EOF")
+
+parser = yacc.yacc()
