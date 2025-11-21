@@ -103,6 +103,8 @@ t_NEWLINE = r'\n+'
 t_TEXT = r'\"([^\\\n]|(\\.))*?\"'
 t_BOOL = r'\b(true|false)\b'
 t_NUMBER = r'\b\d+(\.\d+)?\b'
+t_ignore = ' \t'
+t_ignore = '\r'
 
 def t_IDENTIFIER(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
