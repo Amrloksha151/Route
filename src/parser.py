@@ -40,14 +40,14 @@ def p_statement(p):
                  | while_statement
                  | for_statement
                  | function_definition
-                 | socket_statement
-                 | bind_statement
-                 | connect_statement
-                 | close_statement
-                 | listen_statement
-                 | send_statement
-                 | receive_statement
-                 | thread_statement
+                 | socket_statement NEWLINE
+                 | bind_statement NEWLINE
+                 | connect_statement NEWLINE
+                 | close_statement NEWLINE
+                 | listen_statement NEWLINE
+                 | send_statement NEWLINE
+                 | receive_statement NEWLINE
+                 | thread_statement NEWLINE
                  | NEWLINE'''
     p[0] = p[1]
 
@@ -211,3 +211,23 @@ def p_argument_list(p):
         p[0] = [p[1]]
 
 # Socket operations
+def p_socket_statement(p):
+    '''socket_statement : SOCKET IDENTIFIER protocol TEXT PORT NUMBER'''
+    p[0] = ('socket', p[2], p[3], p[4], p[6])
+
+def p_protocol(p):
+    '''protocol : TCP
+                | UDP
+                | HTTP
+                | ARP
+                | ICMP'''
+    p[0] = p[1]
+
+def p_bind_statement(p):
+    '''bind_statement : BIND IDENTIFIER protocol TEXT PORT NUMBER
+                      | BIND IDENTIFIER'''
+    if len(p) == 7:
+        p[0] = ('bind', p[2], p[3], p[4], p[6])
+    else:
+        p[0] = ('bind', p[2])
+
