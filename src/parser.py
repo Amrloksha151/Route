@@ -40,7 +40,14 @@ def p_statement(p):
                  | while_statement
                  | for_statement
                  | function_definition
-                 | 
+                 | socket_statement
+                 | bind_statement
+                 | connect_statement
+                 | close_statement
+                 | listen_statement
+                 | send_statement
+                 | receive_statement
+                 | thread_statement
                  | NEWLINE'''
     p[0] = p[1]
 
@@ -177,3 +184,30 @@ def p_expression_number(p):
 def p_expression_text(p):
     '''expression : TEXT'''
     p[0] = ('text', p[1][1:-1])  # Remove quotes
+
+def p_expression_bool(p):
+    '''expression : BOOL'''
+    p[0] = ('bool', True if p[1] == 'true' else False)
+
+def p_expression_identifier(p):
+    '''expression : IDENTIFIER'''
+    p[0] = ('identifier', p[1])
+
+def p_expression_function_call(p):
+    '''expression : IDENTIFIER LPAREN optional_arguments RPAREN'''
+    p[0] = ('func_call', p[1], p[3])
+
+def p_optional_arguments(p):
+    '''optional_arguments : argument_list
+                          | empty'''
+    p[0] = p[1]
+
+def p_argument_list(p):
+    '''argument_list : argument_list COMMA expression
+                     | expression'''
+    if len(p) == 4:
+        p[0] = p[1] + [p[3]]
+    else:
+        p[0] = [p[1]]
+
+# Socket operations
