@@ -40,7 +40,8 @@ def p_statement(p):
                  | while_statement
                  | for_statement
                  | function_definition
-                 | return_statement NEWLINE'''
+                 | 
+                 | NEWLINE'''
     p[0] = p[1]
 
 def p_assignment(p):
@@ -95,3 +96,84 @@ def p_optional_else(p):
         p[0] = ('else', p[3])
     else:
         p[0] = None
+
+# While loop
+def p_while_statement(p):
+    '''while_statement : WHILE expression LBRACE loop_statements RBRACE'''
+    p[0] = ('while', p[2], p[4])
+
+def p_loop_statements(p):
+    '''loop_statements : statements 
+                       | BREAK NEWLINE'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = [('break',)]
+
+# For loop
+def p_for_statement(p):
+    '''for_statement : FOR IDENTIFIER IN expression LBRACE loop_statements RBRACE''' # add continue later
+    p[0] = ('for', p[2], p[4], p[6])
+
+# Function definition
+def p_function_definition(p):
+    '''function_definition : FUNCTION IDENTIFIER LPAREN optional_parameters RPAREN LBRACE function_statements RBRACE'''
+    p[0] = ('function', p[2], p[4], p[7])
+
+def p_optional_parameters(p):
+    '''optional_parameters : parameter_list
+                           | empty'''
+    p[0] = p[1]
+
+def p_parameter_list(p):
+    '''parameter_list : parameter_list COMMA IDENTIFIER
+                      | IDENTIFIER'''
+    if len(p) == 4:
+        p[0] = p[1] + [p[3]]
+    else:
+        p[0] = [p[1]]
+
+def p_function_statements(p):
+    '''function_statements : statements 
+                           | RETURN expression NEWLINE'''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = [('return', p[2])]
+
+# Expression rules
+def p_expression_binop(p):
+    '''expression : expression PLUS expression
+                  | expression MINUS expression
+                  | expression TIMES expression
+                  | expression DIVIDE expression
+                  | expression EQ expression
+                  | expression NEQ expression
+                  | expression LT expression
+                  | expression LEQ expression
+                  | expression GT expression
+                  | expression GEQ expression
+                  | expression AND expression
+                  | expression OR expression
+                  | NOT expression'''
+    if p[1] == 'NOT':
+        p[0] = ('unop', p[1], p[2])
+    else:
+        p[0] = ('binop', p[2], p[1], p[3])
+
+def p_expression_uminus_upplus(p):
+    '''expression : MINUS expression %prec UMINUS
+                  | PLUS expression %prec UPLUS'''
+    p[0] = ('unop', p[1], p[2])
+
+def p_expression_group(p):
+    '''expression : LPAREN expression RPAREN'''
+    p[0] = p[2]
+
+def p_expression_number(p):
+    '''expression : NUMBER'''
+    p[0] = ('number', float(p[1]) if '.' in p[1] else int(p[1]))
+
+def p_expression_text(p):
+    '''expression : TEXT'''
+    p[0] = ('text', p[1][1:-1])  # Remove quotes
