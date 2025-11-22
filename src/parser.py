@@ -236,7 +236,7 @@ def p_argument_list(p):
 # Socket operations
 def p_socket_statement(p):
     '''socket_statement : SOCKET protocol TEXT PORT NUMBER'''
-    p[0] = ('socket', p[2], p[3], p[5])
+    p[0] = ('socket', p[2], p[3][1:-1], int(p[5]))
 
 def p_protocol(p):
     '''protocol : TCP

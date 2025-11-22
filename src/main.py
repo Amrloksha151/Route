@@ -13,7 +13,7 @@ def main():
         with open(filename, 'r') as file:
             data = file.read()
         AST = parser.parse(data)
-        #print(AST)
+        print(AST)
         run(AST)
     else:
         print(f"{Fore.CYAN}Route Interactive Interpreter V1.0. By Amr Loksha and Omar Faisal \nType your commands below. To exit, press Ctrl+C.{Style.RESET_ALL}")
@@ -175,8 +175,8 @@ def evaluate_node(node, variables, functions=None):
     elif node_type == 'socket':
         s = {
             'protocol': node[1],
-            'host': evaluate_node(node[2], variables, functions),
-            'port': evaluate_node(node[3], variables, functions),
+            'host': node[2],
+            'port': node[3],
             'socket': None
         }
         if s['protocol'].lower() == 'tcp':
@@ -198,50 +198,50 @@ def evaluate_node(node, variables, functions=None):
             exit(1)
         return s
     elif node_type == 'connect':
-        socket = variables.get(node[1])
+        s = variables.get(node[1])
         try:
-            socket['socket'].connect((socket['host'], socket['port']))
+            s['socket'].connect((s['host'], s['port']))
         except Exception as e:
-            print(f"{Fore.RED}Error: Could not connect to {socket['host']}:{socket['port']} - {e}{Style.RESET_ALL}")
+            print(f"{Fore.RED}Error: Could not connect to {s['host']}:{s['port']} - {e}{Style.RESET_ALL}")
             exit(1)
     elif node_type == 'send':
-        socket = variables.get(node[1])
+        s = variables.get(node[1])
         data = node[2].encode()
         try:
-            socket['socket'].sendall(data) # Works for both TCP and UDP
+            s['socket'].sendall(data) # Works for both TCP and UDP
         except Exception as e:
             print(f"{Fore.RED}Error: Could not send data - {e}{Style.RESET_ALL}")
             exit(1)
     elif node_type == 'receive':
-        socket = variables.get(node[1])
+        s = variables.get(node[1])
         num_bytes = node[2]
         if isinstance(num_bytes, float):
             print(f"{Fore.RED}Error: Number of bytes to receive must be an integer.{Style.RESET_ALL}")
             exit(1)
         try:
-            data = socket['socket'].recv(num_bytes)
+            data = s['socket'].recv(num_bytes)
             return data.decode()
         except Exception as e:
             print(f"{Fore.RED}Error: Could not receive data - {e}{Style.RESET_ALL}")
             exit(1)
     elif node_type == 'close':
-        socket = variables.get(node[1])
+        s = variables.get(node[1])
         try:
-            socket['socket'].close()
+            s['socket'].close()
         except Exception as e:
             print(f"{Fore.RED}Error: Could not close socket - {e}{Style.RESET_ALL}")
             exit(1)
     elif node_type == 'bind':
-        socket = variables.get(node[1])
+        s = variables.get(node[1])
         try:
-            socket['socket'].bind((socket['host'], socket['port']))
+            s['socket'].bind((s['host'], s['port']))
         except Exception as e:
-            print(f"{Fore.RED}Error: Could not bind to {socket['host']}:{socket['port']} - {e}{Style.RESET_ALL}")
+            print(f"{Fore.RED}Error: Could not bind to {s['host']}:{s['port']} - {e}{Style.RESET_ALL}")
             exit(1)
     elif node_type == 'listen':
-        socket = variables.get(node[1])
+        s = variables.get(node[1])
         try:
-            socket['socket'].listen(node[2])
+            s['socket'].listen(node[2])
         except Exception as e:
             print(f"{Fore.RED}Error: Could not listen on socket - {e}{Style.RESET_ALL}")
             exit(1)
