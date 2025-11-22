@@ -7,6 +7,9 @@ init(autoreset=True)
 def main():
     if len(argv) > 1:
         filename = argv[1]
+        if not filename.endswith('.route'):
+            print(f"{Fore.RED}Error: File must have a .route extension.{Style.RESET_ALL}")
+            exit(1)
         with open(filename, 'r') as file:
             data = file.read()
         AST = parser.parse(data)
