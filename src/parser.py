@@ -253,8 +253,8 @@ def p_close_statement(p):
     p[0] = ('close', p[2])
 
 def p_listen_statement(p):
-    '''listen_statement : LISTEN IDENTIFIER'''
-    p[0] = ('listen', p[2])
+    '''listen_statement : LISTEN IDENTIFIER NUMBER'''
+    p[0] = ('listen', p[2], p[3])
 
 def p_send_statement(p):
     '''send_statement : SEND IDENTIFIER TEXT'''
