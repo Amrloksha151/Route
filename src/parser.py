@@ -59,8 +59,18 @@ def p_assignment(p):
 def p_assignment_statement(p):
     '''assignment_statement : input_statement
                             | socket_statement
-                            | thread_statement'''
+                            | thread_statement
+                            | integer_statement
+                            | float_statement'''
     p[0] = p[1]
+
+def p_integer_statement(p):
+    '''integer_statement : INTEGER expression'''
+    p[0] = ('int_conv', p[2])
+
+def p_float_statement(p):
+    '''float_statement : FLOAT expression'''
+    p[0] = ('float_conv', p[2])
 
 def p_output_statement(p):
     '''output_statement : OUTPUT expression'''
@@ -278,4 +288,4 @@ def p_error(p):
     else:
         print("Syntax error at EOF")
 
-parser = yacc.yacc()
+parser = yacc.yacc(debug=False)

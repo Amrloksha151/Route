@@ -79,6 +79,10 @@ def evaluate_node(node, variables, functions=None):
         variables.set(node[1], evaluate_node(node[2], variables, functions))
     elif node_type == 'identifier':
         return variables.get(node[1])
+    elif node_type == 'int_conv':
+        return int(evaluate_node(node[1], variables, functions))
+    elif node_type == 'float_conv':
+        return float(evaluate_node(node[1], variables, functions))
     elif node_type == 'binop':
         left = evaluate_node(node[2], variables, functions)
         right = evaluate_node(node[3], variables, functions)
@@ -157,12 +161,13 @@ def evaluate_node(node, variables, functions=None):
         args = node[2]
         func = functions.get(func_name)
         local_vars = Variables()
-        for i in range(args):
-            try:
-                local_vars.set(func[1][i], evaluate_node(args[i], variables, functions))
-            except IndexError:
-                print(f"{Fore.RED}Error: Incorrect number of arguments for function '{func_name}'.{Style.RESET_ALL}")
-                exit(1)
+        if args:
+            for i in range(args):
+                try:
+                    local_vars.set(func[1][i], evaluate_node(args[i], variables, functions))
+                except IndexError:
+                    print(f"{Fore.RED}Error: Incorrect number of arguments for function '{func_name}'.{Style.RESET_ALL}")
+                    exit(1)
         for statement in func[0]:
             evaluate_node(statement, local_vars, functions)
     elif node_type == 'break':
@@ -270,8 +275,14 @@ def evaluate_node(node, variables, functions=None):
 def run(program):
     variables = Variables()
     functions = Functions()
-    for statement in program[1]:
-        evaluate_node(statement, variables, functions)
+    try:
+        program[1]
+    except TypeError:
+        pass
+    else:
+        for statement in program[1]:
+            evaluate_node(statement, variables, functions)
+
 
 if __name__ == "__main__":
     main()

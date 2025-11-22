@@ -1,0 +1,19 @@
+FUNC main() {
+    firstNumber = INPUT "Num1: "; firstNumber = INT firstNumber;
+    secondNumber = INPUT "Num2: "; secondNumber = INT secondNumber;
+    operand = INPUT "Operation: ";
+
+    IF operand == "+" {
+        OUTPUT firstNumber + secondNumber;
+    } ELIF operand == "-" {
+        OUTPUT firstNumber - secondNumber;
+    } ELIF operand == "*" {
+        OUTPUT firstNumber * secondNumber;
+    } ELIF operand == "/" {
+        OUTPUT firstNumber / secondNumber;
+    } ELSE {
+        OUTPUT "Unsupported Operand";
+    }
+}
+
+main();

@@ -3,6 +3,8 @@ from ply import lex # importing the lex lexer module
 reserved = {
     "true": "TRUE",
     "false": "FALSE",
+    "INT": "INTEGER",
+    "FLOAT": "FLOAT",
 
     # logical operators
     "AND": "AND",
@@ -117,4 +119,4 @@ def t_error(t): # further modification later
     print(f"Illegal character '{t.value[0]}' at line {t.lineno}")
     t.lexer.skip(1)
 
-lexer = lex.lex(lextab=None)
+lexer = lex.lex(lextab=None, debug=False)
