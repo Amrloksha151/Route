@@ -1,5 +1,5 @@
 from ply import yacc # importing the yacc parser module
-from .lexer import tokens
+from lexer import tokens
 
 # Define precedence and associativity of operators
 precedence = (
@@ -32,45 +32,48 @@ def p_statements_single(p):
     p[0] = [p[1]]
 
 def p_statement(p):
-    '''statement : expression NEWLINE
-                 | assignment NEWLINE
-                 | output_statement NEWLINE
-                 | input_statement NEWLINE
+    '''statement : expression SEMICOLON
+                 | assignment SEMICOLON
+                 | output_statement SEMICOLON
+                 | input_statement SEMICOLON
                  | if_statement
                  | while_statement
                  | for_statement
                  | function_definition
-                 | socket_statement NEWLINE
-                 | bind_statement NEWLINE
-                 | connect_statement NEWLINE
-                 | close_statement NEWLINE
-                 | listen_statement NEWLINE
-                 | send_statement NEWLINE
-                 | receive_statement NEWLINE
-                 | thread_statement NEWLINE
-                 | run_thread_statement NEWLINE
-                 | NEWLINE'''
+                 | socket_statement SEMICOLON
+                 | bind_statement SEMICOLON
+                 | connect_statement SEMICOLON
+                 | close_statement SEMICOLON
+                 | listen_statement SEMICOLON
+                 | send_statement SEMICOLON
+                 | receive_statement SEMICOLON
+                 | thread_statement SEMICOLON
+                 | run_thread_statement SEMICOLON'''
     p[0] = p[1]
 
 def p_assignment(p):
-    '''assignment : IDENTIFIER ASSIGN expression'''
+    '''assignment : IDENTIFIER ASSIGN expression
+                  | IDENTIFIER ASSIGN assignment_statement'''
     p[0] = ('assign', p[1], p[3])
+
+def p_assignment_statement(p):
+    '''assignment_statement : input_statement
+                            | socket_statement
+                            | thread_statement'''
+    p[0] = p[1]
 
 def p_output_statement(p):
     '''output_statement : OUTPUT expression'''
     p[0] = ('output', p[2])
 
 def p_input_statement(p):
-    '''input_statement : IDENTIFIER ASSIGN INPUT optional_prompt'''
-    if p[4]:
-        p[0] = ('input', p[1], p[4])
-    else:
-        p[0] = ('input', p[1])
+    '''input_statement : INPUT optional_prompt'''
+    p[0] = ('input', p[2])
 
 def p_optional_prompt(p):
     '''optional_prompt : TEXT
                        | empty'''
-    p[0] = p[1]
+    p[0] = p[1][1:-1] if p[1] else None
 
 def p_empty(p):
     '''empty :'''
@@ -120,7 +123,7 @@ def p_loop_statements(p):
 
 def p_loop_statement(p):
     '''loop_statement : statement
-                      | BREAK NEWLINE'''
+                      | BREAK SEMICOLON'''
     if len(p) == 2:
         p[0] = p[1]
     else:
@@ -151,7 +154,7 @@ def p_parameter_list(p):
 
 def p_function_statements(p):
     '''function_statements : statements 
-                           | RETURN expression NEWLINE'''
+                           | RETURN expression SEMICOLON'''
     if len(p) == 2:
         p[0] = p[1]
     else:
@@ -195,7 +198,8 @@ def p_expression_text(p):
     p[0] = ('text', p[1][1:-1])  # Remove quotes
 
 def p_expression_bool(p):
-    '''expression : BOOL'''
+    '''expression : TRUE
+                  | FALSE'''
     p[0] = ('bool', True if p[1] == 'true' else False)
 
 def p_expression_identifier(p):
@@ -221,8 +225,8 @@ def p_argument_list(p):
 
 # Socket operations
 def p_socket_statement(p):
-    '''socket_statement : SOCKET IDENTIFIER protocol TEXT PORT NUMBER'''
-    p[0] = ('socket', p[2], p[3], p[4], p[6])
+    '''socket_statement : SOCKET protocol TEXT PORT NUMBER'''
+    p[0] = ('socket', p[2], p[3], p[5])
 
 def p_protocol(p):
     '''protocol : TCP
@@ -261,8 +265,8 @@ def p_receive_statement(p):
     p[0] = ('receive', p[2], p[3])
 
 def p_thread_statement(p):
-    '''thread_statement : IDENTIFIER ASSIGN THREAD IDENTIFIER ARGS LPAREN optional_arguments RPAREN'''
-    p[0] = ('thread', p[1], p[4], p[7])
+    '''thread_statement : THREAD IDENTIFIER ARGS LPAREN optional_arguments RPAREN'''
+    p[0] = ('thread', p[2], p[5])
 
 def p_run_thread_statement(p):
     '''run_thread_statement : RUN IDENTIFIER'''

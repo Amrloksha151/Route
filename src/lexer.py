@@ -1,6 +1,9 @@
 from ply import lex # importing the lex lexer module
 
 reserved = {
+    "true": "TRUE",
+    "false": "FALSE",
+
     # logical operators
     "AND": "AND",
     "OR": "OR",
@@ -42,6 +45,7 @@ reserved = {
     "CLOSE": "CLOSE",
     "BIND": "BIND",
     "LISTEN": "LISTEN",
+    "PORT": "PORT",
 
     # other keywords
     "OUTPUT": "OUTPUT",
@@ -52,10 +56,8 @@ tokens = [
     # literals and identifiers
     "NUMBER",
     "TEXT",
-    "BOOL",
     "IDENTIFIER",
-    "NEWLINE",
-    "COMMENT",
+    "SEMICOLON",
 
     # assignment and punctuation
     "ASSIGN",
@@ -100,11 +102,11 @@ t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_LBRACE = r'\{'
 t_RBRACE = r'\}'
-t_NEWLINE = r'\r\n|\r|\n'
-t_TEXT = r'\"([^\\\n]|(\\.))*?\"'
-t_BOOL = r'\b(true|false)\b'
+t_ignore_NEWLINE = r'\r\n|\r|\n'
+t_TEXT = r'(\"([^\\\n]|(\\.))*?\"|\'([^\\\n]|(\\.))*?\')'
 t_NUMBER = r'\b\d+(\.\d+)?\b'
 t_ignore = ' \t'
+t_SEMICOLON = r';'
 
 def t_IDENTIFIER(t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
@@ -115,49 +117,4 @@ def t_error(t): # further modification later
     print(f"Illegal character '{t.value[0]}' at line {t.lineno}")
     t.lexer.skip(1)
 
-# reserved words mapping
-# functions / return
-t_FUNCTION = r'FUNC'
-t_RETURN = r'RETURN'
-
-# control flow
-t_IF = r'IF'
-t_ELSE = r'ELSE'
-t_ELIF = r'ELIF'
-t_FOR = r'FOR'
-t_IN = r'IN'
-# t_CONTINUE = r'CONTINUE'
-t_WHILE = r'WHILE'
-t_BREAK = r'BREAK'
-
-# logical operators
-t_AND = r'AND'
-t_OR = r'OR'
-t_NOT = r'NOT'
-
-# threading
-t_THREAD = r'THREAD'
-t_RUN = r'RUN'
-t_ARGS = r'ARGS'
-# t_JOIN = r'JOIN'
-# t_LOCK = r'LOCK'
-# t_UNLOCK = r'UNLOCK'
-
-# networking / protocols
-t_ARP = r'ARP'
-t_HTTP = r'HTTP'
-t_ICMP = r'ICMP'
-# t_WS = r'WS'
-t_SOCKET = r'SOCKET'
-t_TCP = r'TCP'
-t_UDP = r'UDP'
-t_CONNECT = r'CONNECT'
-t_SEND = r'SEND'
-t_RECEIVE = r'RECEIVE'
-t_CLOSE = r'CLOSE'
-t_BIND = r'BIND'
-t_LISTEN = r'LISTEN'
-t_OUTPUT = r'OUTPUT'
-t_INPUT = r'INPUT'
-
-lexer = lex.lex()
+lexer = lex.lex(lextab=None)
