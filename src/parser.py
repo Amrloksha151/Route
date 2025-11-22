@@ -111,12 +111,20 @@ def p_while_statement(p):
     p[0] = ('while', p[2], p[4])
 
 def p_loop_statements(p):
-    '''loop_statements : statements 
-                       | BREAK NEWLINE'''
+    '''loop_statements : loop_statements loop_statement
+                       | loop_statement'''
+    if len(p) == 3:
+        p[0] = p[1] + [p[2]]
+    else:
+        p[0] = [p[1]]
+
+def p_loop_statement(p):
+    '''loop_statement : statement
+                      | BREAK NEWLINE'''
     if len(p) == 2:
         p[0] = p[1]
     else:
-        p[0] = [('break',)]
+        p[0] = ('break',)
 
 # For loop
 def p_for_statement(p):
@@ -162,12 +170,12 @@ def p_expression_binop(p):
                   | expression GT expression
                   | expression GEQ expression
                   | expression AND expression
-                  | expression OR expression
-                  | NOT expression'''
-    if p[1] == 'NOT':
-        p[0] = ('unop', p[1], p[2])
-    else:
-        p[0] = ('binop', p[2], p[1], p[3])
+                  | expression OR expression'''
+    p[0] = ('binop', p[2], p[1], p[3])
+
+def p_expression_not(p):
+    '''expression : NOT expression'''
+    p[0] = ('unop', p[1], p[2])
 
 def p_expression_uminus_upplus(p):
     '''expression : MINUS expression %prec UMINUS
@@ -234,7 +242,7 @@ def p_bind_statement(p):
 
 def p_connect_statement(p):
     '''connect_statement : CONNECT IDENTIFIER'''
-    p[0] = ('connect', p[2], p[3], p[4], p[6])
+    p[0] = ('connect', p[2])
 
 def p_close_statement(p):
     '''close_statement : CLOSE IDENTIFIER'''
@@ -254,7 +262,7 @@ def p_receive_statement(p):
 
 def p_thread_statement(p):
     '''thread_statement : IDENTIFIER ASSIGN THREAD IDENTIFIER ARGS LPAREN optional_arguments RPAREN'''
-    p[0] = ('thread', p[2], p[5])
+    p[0] = ('thread', p[1], p[4], p[7])
 
 def p_run_thread_statement(p):
     '''run_thread_statement : RUN IDENTIFIER'''
