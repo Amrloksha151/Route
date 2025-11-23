@@ -1,4 +1,4 @@
-socket = SOCKET TCP "1.1.1.1" PORT 443;
+socket = SOCKET TCP "127.0.0.1" PORT 8000;
 CONNECT socket;
 SEND socket "Hello, World!!";
 RECEIVE socket 4096;

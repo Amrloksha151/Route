@@ -14,7 +14,7 @@ def main():
             data = file.read()
         AST = parser.parse(data)
         print(AST)
-        run(AST)
+        #run(AST)
     else:
         print(f"{Fore.CYAN}Route Interactive Interpreter V1.1. By Amr Loksha and Omar Faisal \nType your commands below. To exit, press Ctrl+C.{Style.RESET_ALL}")
         while True:
