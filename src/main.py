@@ -16,7 +16,7 @@ def main():
         print(AST)
         run(AST)
     else:
-        print(f"{Fore.CYAN}Route Interactive Interpreter V1.0. By Amr Loksha and Omar Faisal \nType your commands below. To exit, press Ctrl+C.{Style.RESET_ALL}")
+        print(f"{Fore.CYAN}Route Interactive Interpreter V1.1. By Amr Loksha and Omar Faisal \nType your commands below. To exit, press Ctrl+C.{Style.RESET_ALL}")
         while True:
             try:
                 s = input('route> ')
