@@ -250,7 +250,7 @@ def p_bind_statement(p):
     '''bind_statement : BIND IDENTIFIER protocol TEXT PORT NUMBER
                       | BIND IDENTIFIER'''
     if len(p) == 7:
-        p[0] = ('bind', p[2], p[3], p[4], p[6])
+        p[0] = ('bind', p[2], p[3], p[4][1:-1], int(p[6]))
     else:
         p[0] = ('bind', p[2])
 
@@ -264,15 +264,15 @@ def p_close_statement(p):
 
 def p_listen_statement(p):
     '''listen_statement : LISTEN IDENTIFIER NUMBER'''
-    p[0] = ('listen', p[2], p[3])
+    p[0] = ('listen', p[2], int(p[3]))
 
 def p_send_statement(p):
     '''send_statement : SEND IDENTIFIER TEXT'''
-    p[0] = ('send', p[2], p[3])
+    p[0] = ('send', p[2], p[3][1:-1])
 
 def p_receive_statement(p):
     '''receive_statement : RECEIVE IDENTIFIER NUMBER'''
-    p[0] = ('receive', p[2], p[3])
+    p[0] = ('receive', p[2], int(p[3]))
 
 def p_thread_statement(p):
     '''thread_statement : THREAD IDENTIFIER ARGS LPAREN optional_arguments RPAREN'''

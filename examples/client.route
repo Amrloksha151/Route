@@ -1,0 +1,4 @@
+socket = SOCKET TCP "1.1.1.1" PORT 443;
+CONNECT socket;
+SEND socket "Hello, World!!";
+RECEIVE socket 4096;
