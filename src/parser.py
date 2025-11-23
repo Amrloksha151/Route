@@ -267,7 +267,7 @@ def p_listen_statement(p):
     p[0] = ('listen', p[2], int(p[3]))
 
 def p_send_statement(p):
-    '''send_statement : SEND IDENTIFIER TEXT'''
+    '''send_statement : SEND IDENTIFIER TEXT''' # change the text to an expression
     p[0] = ('send', p[2], p[3][1:-1])
 
 def p_receive_statement(p):
