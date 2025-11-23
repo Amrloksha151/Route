@@ -11,9 +11,13 @@ def main():
     print(f"Listening on port {PORT}")
 
     while True:
-        client, address = server.accept()
-        print(f"Accepted connection from {address[0]}:{address[1]}")
-        client_handler = threading.Thread(target=handle_client, args=(client,))
+        try:
+            client, address = server.accept()
+            print(f"Accepted connection from {address[0]}:{address[1]}")
+            client_handler = threading.Thread(target=handle_client, args=(client,))
+            client_handler.start()
+        except KeyboardInterrupt:
+            break
 
 def handle_client(client_socket):
     with client_socket as sock:
